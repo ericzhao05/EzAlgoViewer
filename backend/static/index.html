@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stack Visualizer</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .stack-item { padding: 10px; margin: 2px; background-color: #f0f0f0; border: 1px solid #ddd; }
+        .controls { margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>Stack Visualizer</h1>
+    <div class="controls">
+        <input type="text" id="valueInput" placeholder="Enter a value">
+        <button onclick="pushValue()">Push</button>
+        <button onclick="popValue()">Pop</button>
+    </div>
+    <div id="stackContainer"></div>
+
+    <script>
+        function updateStack(stack) {
+            const container = document.getElementById('stackContainer');
+            container.innerHTML = '';
+            stack.reverse().forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'stack-item';
+                div.textContent = item;
+                container.appendChild(div);
+            });
+        }
+
+        function pushValue() {
+            const value = document.getElementById('valueInput').value;
+            if (!value) return;
+            
+            fetch('/api/stack/push', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ value })
+            })
+            .then(response => response.json())
+            .then(data => {
+                updateStack(data.stack);
+                document.getElementById('valueInput').value = '';
+            });
+        }
+
+        function popValue() {
+            fetch('/api/stack/pop', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                updateStack(data.stack);
+            });
+        }
+
+        // Initialize stack display
+        fetch('/api/stack/push', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value: null })
+        })
+        .then(response => response.json())
+        .then(data => {
+            updateStack(data.stack);
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stack Visualizer</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .stack-item { padding: 10px; margin: 2px; background-color: #f0f0f0; border: 1px solid #ddd; }
+        .controls { margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <!-- You might want a root div for React to mount onto -->
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+        <!-- Initial static content if needed, React will replace this -->
+        <h1>Stack Visualizer</h1>
+        <div class="controls">
+            <input type="text" id="valueInput" placeholder="Enter a value">
+            <button onclick="pushValue()">Push</button> <!-- These buttons will likely be replaced by React components -->
+            <button onclick="popValue()">Pop</button> <!-- These buttons will likely be replaced by React components -->
+        </div>
+        <div id="stackContainer"></div>
+        <!-- End of initial static content -->
+    </div>
+
+</body>
+</html>

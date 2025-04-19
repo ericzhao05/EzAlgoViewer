@@ -16,6 +16,9 @@ def push_stack():
         if value is not None:
             stack.push(value)
             return jsonify({"stack": stack.to_list(), "success": True})
+            # 200 OK (default for successful responses)
+            # 400 Bad Request (when no value is provided or the stack is empty)
+            # 500 Internal Server Error (for other exceptions)
         else:
             return jsonify({"error": "No value provided", "stack": stack.to_list()}), 400
     except Exception as e:
@@ -32,7 +35,7 @@ def pop_stack():
     except Exception as e:
         return jsonify({"error": str(e), "stack": stack.to_list()}), 500
 
-# Add a route to get the current stack state
+# Add a route to get current stack state
 @ds_api.route('/stack', methods=['GET'])
 def get_stack():
     return jsonify({"stack": stack.to_list()})

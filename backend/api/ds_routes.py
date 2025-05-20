@@ -4,9 +4,12 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from flask import Blueprint, request, jsonify
 from DataStrcutures.StaticArrayStack import StaticArrayStack
+from DataStrcutures.StaticArrayQueue.py import StaticArrayQueue
+from DataStrcutures.ArrayQueue.py import ArrayQueue
 
 ds_api = Blueprint('ds_api', __name__)
 stack = StaticArrayStack(100) 
+staticQueue = StaticArrayQueue(100) # try to implement that the size of the queue will be customized by the user
 
 @ds_api.route('/stack/push', methods=['POST'])
 def push_stack():
@@ -39,3 +42,33 @@ def pop_stack():
 @ds_api.route('/stack', methods=['GET'])
 def get_stack():
     return jsonify({"stack": stack.to_list()})
+
+@ds_api.route("/staticQueue", methods=['GET'])
+def get_static_queue():
+    return jsonify({"staticQueue": staticQueue.to_list()})
+
+@ds_api.route("/staticQueue/enqueue", method=["POST"])
+def enqueueStaticQueue():
+    try:
+        data = request.json
+        value = data.get("value")
+        if value is not None:
+            staticQueue.enqueue(value)
+            return jsonify({"staticQueue": staticQueue.to_list(), "success": True})
+        else: 
+            return jsonify({"error": "No value provided", "staticQueue": stack.to_list()})
+    except Exception as e:
+        return  jsonify({"error": str(e), "staticQueue": staticQueue.to_list()})
+    
+@ds_api.route("/staticQueue/dequeue", method=[POST])
+def dequeueStaticQueue():
+    try:
+        if not staticQueue.is_empty:
+            staticQueue.dequeue()
+            return jsonify({"staticQueue": staticQueue.to_list(), "success": True})
+        else:                          
+            return jsonify({"error": "Queue is empty", "Queue": []}), 400
+    except Exception as e:
+        return jsonify({"error": str(e), "stack": stack.to_list()}), 500
+        
+    
